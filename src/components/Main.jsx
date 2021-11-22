@@ -4,14 +4,26 @@ import Login from "./Login";
 import User from "./User";
 import Navigation from "./Navigation";
 import Home from "./Home";
+import Signup from "./Signup";
+import useToken from "../services/useToken";
 
-const Main = () => {
+const UnprotectedView = ({auth}) => {
+  return (
+    <Routes>
+      <Route path="/">
+        <Route index element={<Login setToken={auth.setToken}/>} />
+        <Route path = "signup" element={<Signup/>} />
+      </Route>
+    </Routes>
+  )
+}
 
+const ProtectedView = ({auth}) => {
   return (
     <Routes>
       <Route path="/" element={
         <>
-          <Navigation />
+          <Navigation auth = {auth}/>
           <Outlet />
         </>
       }>
@@ -22,6 +34,12 @@ const Main = () => {
       
     </Routes>
   )
+}
+
+const Main = () => {
+  const {token, setToken} = useToken();
+  
+  return ( token?<ProtectedView auth={{token, setToken}}/>:<UnprotectedView auth={{token, setToken}}/> )
 }
 
 

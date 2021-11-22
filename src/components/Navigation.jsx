@@ -6,8 +6,21 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router";
-const Navigation = () => {
+import { call } from "../services/api";
+
+const Navigation = ({auth}) => {
   const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    call('POST', "/users/logout").then(res => {
+      // console.log(res);
+      auth.setToken();
+    }).catch(err => {
+      console.log(err);
+    })
+    
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{ position: "static" }}>
@@ -26,11 +39,9 @@ const Navigation = () => {
           </Button>
           <Button
             color="inherit"
-            onClick={() => {
-              navigate("/login");
-            }}
+            onClick={logoutHandler}
           >
-            Login
+            Logout
           </Button>
           <Button
             color="inherit"
@@ -38,7 +49,7 @@ const Navigation = () => {
               navigate("/user");
             }}
           >
-            Home
+            User
           </Button>
         </Toolbar>
       </AppBar>
