@@ -1,9 +1,8 @@
+import { Container, Box } from "@mui/material";
+import UserDetails from "./UserDetails";
+import TaskList from "./TaskList";
 const User = () => {
-  return (
-    <div>
-      User
-    </div>
-  )
+  return (<TaskList />)
 }
 
 export default User;
