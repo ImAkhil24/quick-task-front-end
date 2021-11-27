@@ -1,5 +1,7 @@
 import { ExpandMore } from "@mui/icons-material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import BoltIcon from "@mui/icons-material/Bolt";
 import {
   Accordion,
@@ -15,13 +17,15 @@ const useStyles = makeStyles({
   complete: {
     textDecorationLine: "line-through",
   },
+  incomplete: {
+  }
 });
 
 const Task = () => {
   const completed = false;
   const classes = useStyles();
   return (
-    <Accordion sx={{m:1}}>
+    <Accordion elevation= {0} sx={{m:1 } }>
       <AccordionSummary expandIcon={<ExpandMore />}>
         <Typography className={completed ? classes.complete : ""}>
           {" "}
@@ -32,21 +36,30 @@ const Task = () => {
               top: "6px",
             }}
           />{" "}
-          Title of the Task{" "}
+          Next goal of this project{" "}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
+          It'll look better when we will add background and just above this list there will be a pomodoro starter watch type thing.
         </Typography>
-        <Box display="flex" flexDirection="row" justifyContent="flex-end">
+        <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" m={0.5}>
+          <Box>
+            <Button>
+            <DeleteIcon fontSize="medium" color="error"/>
+            </Button>
+            <Button sx={{ml: 5}}>
+          <EditIcon fontSize="medium" color="info" />
+              
+            </Button>
+          </Box>
+          
           {!completed ? (
-            <Button variant="contained" color="success">
+            <Button variant="outlined" color="success" className={classes.incomplete}>
               Mark As Done
             </Button>
           ) : (
-            <Button variant="contained" color="error">
+            <Button variant="outlined" color="error">
               Mark As Undone
             </Button>
           )}

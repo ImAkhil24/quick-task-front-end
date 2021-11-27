@@ -7,40 +7,46 @@ import Home from "./Home";
 import Signup from "./Signup";
 import useToken from "../services/useToken";
 
-const UnprotectedView = ({auth}) => {
+const UnprotectedView = ({ auth }) => {
   return (
     <Routes>
       <Route path="/">
-        <Route index element={<Login setToken={auth.setToken}/>} />
-        <Route path = "signup" element={<Signup/>} />
+        <Route index element={<Login setToken={auth.setToken} />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="*" element={<Login setToken={auth.setToken} />} />
       </Route>
     </Routes>
-  )
-}
+  );
+};
 
-const ProtectedView = ({auth}) => {
+const ProtectedView = ({ auth }) => {
   return (
     <Routes>
-      <Route path="/" element={
-        <>
-          <Navigation auth = {auth}/>
-          <Outlet />
-        </>
-      }>
-        <Route index element={<Home/>}></Route>
-        <Route path="login" element={<Login/>} />
-        <Route path="user" element={<User/>} />
+      <Route
+        path="/"
+        element={
+          <>
+            <Navigation auth={auth} />
+            <Outlet />
+          </>
+        }
+      >
+        <Route index element={<Home />}></Route>
+        <Route path="login" element={<Login />} />
+        <Route path="user" element={<User />} />
       </Route>
-      
     </Routes>
-  )
-}
+  );
+};
 
 const Main = () => {
-  const {token, setToken} = useToken();
-  
-  return ( token?<ProtectedView auth={{token, setToken}}/>:<UnprotectedView auth={{token, setToken}}/> )
-}
+  const { token, setToken } = useToken();
 
+  return token ? (
+    <ProtectedView auth={{ token, setToken }} />
+  ) : (
+    <UnprotectedView auth={{ token, setToken }} />
+  );
+};
 
 export default Main;
