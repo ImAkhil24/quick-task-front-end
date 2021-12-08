@@ -4,7 +4,7 @@ import TaskList from "./TaskList";
 const User = () => {
   return (
     <Box
-      height="100%"
+      height="85%"
       display="flex"
       flexDirection="row"
       justifyContent="space-around"
