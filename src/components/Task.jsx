@@ -20,29 +20,25 @@ const useStyles = makeStyles({
   incomplete: {},
 });
 
-const Task = () => {
+const Task = ({ task, deleteTaskHandler }) => {
   const completed = false;
   const classes = useStyles();
   return (
     <Accordion elevation={0} sx={{ m: 1 }}>
       <AccordionSummary expandIcon={<ExpandMore />}>
         <Typography className={completed ? classes.complete : ""}>
-          {" "}
           <BoltIcon
             color="info"
             sx={{
               position: "relative",
               top: "6px",
             }}
-          />{" "}
-          Next goal of this project{" "}
+          />
+          {task.title}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>
-          It'll look better when we will add background and just above this list
-          there will be a pomodoro starter watch type thing.
-        </Typography>
+        <Typography>{task.description}</Typography>
         <Box
           display="flex"
           flexDirection="row"
@@ -51,7 +47,7 @@ const Task = () => {
           m={0.5}
         >
           <Box>
-            <Button>
+            <Button onClick={() => deleteTaskHandler(task._id)}>
               <DeleteIcon fontSize="medium" color="error" />
             </Button>
             <Button sx={{ ml: 5 }}>
