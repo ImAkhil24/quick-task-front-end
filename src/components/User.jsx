@@ -1,6 +1,7 @@
 import { Container, Box, CssBaseline } from "@mui/material";
 import UserDetails from "./UserDetails";
 import TaskList from "./TaskList";
+import PomTimer from "./PomTimer";
 const User = () => {
   return (
     <Box
@@ -11,13 +12,13 @@ const User = () => {
       m={2}
     >
       <Box
-        maxHeight="100%"
+        height="100%"
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
       >
         <UserDetails />
-        {/* <div> pom</div> */}
+        <PomTimer />
       </Box>
       <TaskList />
     </Box>
