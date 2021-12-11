@@ -5,11 +5,7 @@ import PomTimer from "./PomTimer";
 import { useState, useEffect } from "react";
 import { call } from "../services/api";
 
-const initialTasks = {
-  tasks: [],
-  countCompleted: 0,
-  countPending: 0,
-};
+
 
 // it'll update the count
 const taskCount = (data) => {
@@ -22,7 +18,17 @@ const taskCount = (data) => {
 };
 
 const User = (id) => {
+  // states
+
+  const initialTasks = {
+    tasks: [],
+    countCompleted: 0,
+    countPending: 0,
+  };
   const [tasks, setTasks] = useState(initialTasks);
+
+
+  // handlers
 
   const deleteTaskHandler = (id) => {
     call("DELETE", "/tasks/" + id)
@@ -38,6 +44,21 @@ const User = (id) => {
         newTasks.countPending = countPending;
 
         setTasks(newTasks);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addTaskHandler = (formData) => {
+    call("POST", "/tasks", formData)
+      .then((data) => {
+        setTasks((prevState) => {
+          const newState = { ...prevState };
+          newState.tasks.push(data);
+          const [countCompleted, countPending] = taskCount(newState.tasks);
+          return { ...newState, countCompleted, countPending };
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -79,7 +100,11 @@ const User = (id) => {
         <UserDetails tasks={tasks} />
         <PomTimer />
       </Box>
-      <TaskList tasks={tasks} deleteTaskHandler={deleteTaskHandler} />
+      <TaskList
+        tasks={tasks}
+        deleteTaskHandler={deleteTaskHandler}
+        addTaskHandler={addTaskHandler}
+      />
     </Box>
   );
 };

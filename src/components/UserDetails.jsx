@@ -10,8 +10,8 @@ import {
   Box,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import {useState, useEffect} from "react";
-import {call} from "../services/api";
+import { useState, useEffect } from "react";
+import { call } from "../services/api";
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -45,21 +45,26 @@ const useStyles = makeStyles(() => ({
     letterSpacing: "1px",
   },
 }));
-const initialState = {
-  name: null,
-  email: null,
-  age: null,
-}
 
-const UserDetails = ({tasks}) => {
-  const [userInfo, setUserInfo]  = useState(initialState);
+const UserDetails = ({ tasks }) => {
 
-  useEffect(()=>{
-    call("GET", "/users/me").then((data)=> {
-      setUserInfo(data);
-    }).catch((err)=>{
-      console.log(err);
-    })
+  // states
+  const initialState = {
+    name: null,
+    email: null,
+    age: null,
+  };
+  const [userInfo, setUserInfo] = useState(initialState);
+
+  // sideEffect
+  useEffect(() => {
+    call("GET", "/users/me")
+      .then((data) => {
+        setUserInfo(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   // we have to update no of task here too so make the tasks state on the mutual parent component of task list and userDetails.
@@ -71,7 +76,9 @@ const UserDetails = ({tasks}) => {
       <CardContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
-        <Avatar sx={{ bgcolor: "primary.main" }}>{userInfo.name!==null?userInfo.name[0]:""}</Avatar>
+        <Avatar sx={{ bgcolor: "primary.main" }}>
+          {userInfo.name !== null ? userInfo.name[0] : ""}
+        </Avatar>
         <Typography className={classes.heading}>{userInfo.name}</Typography>
       </CardContent>
       <Divider />
