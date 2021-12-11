@@ -5,9 +5,7 @@ import PomTimer from "./PomTimer";
 import { useState, useEffect } from "react";
 import { call } from "../services/api";
 
-
-
-// it'll update the count
+// helpers
 const taskCount = (data) => {
   let countCompleted = 0;
   data.forEach((element) => {
@@ -26,7 +24,6 @@ const User = (id) => {
     countPending: 0,
   };
   const [tasks, setTasks] = useState(initialTasks);
-
 
   // handlers
 
@@ -65,6 +62,34 @@ const User = (id) => {
       });
   };
 
+  const taskUpdateHandler = (updatedTask, id) => {
+    call("PATCH", "/tasks/" + id, updatedTask)
+      .then((data) => {
+        setTasks((prevState) => {
+          let newState = { ...prevState };
+          newState.tasks = newState.tasks.filter((task) => {
+            return task._id !== id;
+          });
+
+          newState.tasks.push(data);
+          const [countCompleted, countPending] = taskCount(newState.tasks);
+          return { ...newState, countCompleted, countPending };
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const toggleCompleteHandler = (id) => {
+    const newTask = tasks.tasks.find((task) => {
+      return id === task._id;
+    });
+    let { title, description, completed } = newTask;
+    completed = !completed;
+    taskUpdateHandler({ title, description, completed }, id);
+  };
+
   useEffect(() => {
     call("GET", "/tasks")
       .then((data) => {
@@ -83,6 +108,7 @@ const User = (id) => {
       });
   }, []);
 
+  // JSX
   return (
     <Box
       height="85%"
@@ -104,6 +130,8 @@ const User = (id) => {
         tasks={tasks}
         deleteTaskHandler={deleteTaskHandler}
         addTaskHandler={addTaskHandler}
+        taskUpdateHandler={taskUpdateHandler}
+        toggleCompleteHandler={toggleCompleteHandler}
       />
     </Box>
   );

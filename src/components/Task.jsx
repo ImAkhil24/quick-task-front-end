@@ -12,6 +12,8 @@ import {
   Box,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
+import TaskDialog from "./TaskDialog";
+import { useState } from "react";
 
 const useStyles = makeStyles({
   complete: {
@@ -20,57 +22,91 @@ const useStyles = makeStyles({
   incomplete: {},
 });
 
-const Task = ({ task, deleteTaskHandler }) => {
-  const completed = false;
+const Task = ({
+  task,
+  deleteTaskHandler,
+  toggleCompleteHandler,
+  taskUpdateHandler,
+}) => {
+  const [open, setOpen] = useState(false);
+  const { completed } = task;
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const classes = useStyles();
   return (
-    <Accordion elevation={0} sx={{ m: 1 }}>
-      <AccordionSummary expandIcon={<ExpandMore />}>
-        <Typography className={completed ? classes.complete : ""}>
-          <BoltIcon
-            color="info"
-            sx={{
-              position: "relative",
-              top: "6px",
-            }}
-          />
-          {task.title}
-        </Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Typography>{task.description}</Typography>
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          m={0.5}
-        >
-          <Box>
-            <Button onClick={() => deleteTaskHandler(task._id)}>
-              <DeleteIcon fontSize="medium" color="error" />
-            </Button>
-            <Button sx={{ ml: 5 }}>
-              <EditIcon fontSize="medium" color="info" />
-            </Button>
-          </Box>
+    <>
+      <TaskDialog
+        TaskHandler={taskUpdateHandler}
+        handleClickOpen={handleClickOpen}
+        handleClose={handleClose}
+        open={open}
+        id={task._id}
+        initialTaskDetail={{
+          title: task.title,
+          description: task.description,
+          completed: task.completed,
+        }}
+      />
+      <Accordion elevation={0} sx={{ m: 1 }}>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <Typography className={completed ? classes.complete : ""}>
+            <BoltIcon
+              color="info"
+              sx={{
+                position: "relative",
+                top: "6px",
+              }}
+            />
+            {task.title}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>{task.description}</Typography>
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            m={0.5}
+          >
+            <Box>
+              <Button onClick={() => deleteTaskHandler(task._id)}>
+                <DeleteIcon fontSize="medium" color="error" />
+              </Button>
+              <Button sx={{ ml: 5 }} onClick={handleClickOpen}>
+                <EditIcon fontSize="medium" color="info" />
+              </Button>
+            </Box>
 
-          {!completed ? (
-            <Button
-              variant="outlined"
-              color="success"
-              className={classes.incomplete}
-            >
-              Mark As Done
-            </Button>
-          ) : (
-            <Button variant="outlined" color="error">
-              Mark As Undone
-            </Button>
-          )}
-        </Box>
-      </AccordionDetails>
-    </Accordion>
+            {!completed ? (
+              <Button
+                variant="outlined"
+                color="success"
+                className={classes.incomplete}
+                onClick={() => toggleCompleteHandler(task._id)}
+              >
+                Mark As Done
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => toggleCompleteHandler(task._id)}
+              >
+                Mark As Undone
+              </Button>
+            )}
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    </>
   );
 };
 

@@ -18,91 +18,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import Task from "./Task";
 import { useState } from "react";
-
-const NewTaskDialog = ({
-  open,
-  handleClickOpen,
-  handleClose,
-  addTaskHandler,
-}) => {
-  // states
-  const initialTaskDetail = {
-    title: "",
-    description: "",
-    completed: false,
-  };
-  const [taskDetail, setTaskDetail] = useState(initialTaskDetail);
-  const [checked, setChecked] = useState(false);
-
-  // handlers
-  const onChangeHandler = (e) => {
-    setTaskDetail((prevState) => {
-      return { ...prevState, [e.target.name]: e.target.value };
-    });
-  };
-
-  const onCheckHandler = (e) => {
-    setChecked(!checked);
-  };
-
-  const formSubmitHandler = (e) => {
-    e.preventDefault();
-    const formData = { ...taskDetail, completed: checked };
-    addTaskHandler(formData);
-    handleClose();
-  };
-
-  // jsx
-  return (
-    <div>
-      <Dialog open={open} onClose={handleClose}>
-        <form onSubmit={formSubmitHandler}>
-          <DialogTitle>New Task</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please input the task details and then click Add Task button.
-            </DialogContentText>
-
-            <Box
-              sx={{
-                "& .MuiTextField-root": { m: 1 },
-              }}
-            >
-              <TextField
-                required
-                fullWidth
-                placeholder="title"
-                name="title"
-                value={taskDetail.title}
-                onChange={onChangeHandler}
-              />
-              <TextField
-                required
-                fullWidth
-                multiline
-                placeholder="description"
-                maxRows="2"
-                name="description"
-                value={taskDetail.description}
-                onChange={onChangeHandler}
-              />
-              <FormControlLabel
-                control={<Checkbox name="completed" />}
-                label="completed"
-                onChange={onCheckHandler}
-                checked={checked}
-              />
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Add Task</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
-  );
-};
+import TaskDialog from "./TaskDialog";
 
 const TaskList = (props) => {
   // task card with a button to mark it complete and when the task is marked complete it's content will get line through text style.
@@ -121,7 +37,13 @@ const TaskList = (props) => {
 
   const taskList = tasks.map((task) => {
     return (
-      <Task key={task._id} task={task} deleteTaskHandler={deleteTaskHandler} />
+      <Task
+        key={task._id}
+        task={task}
+        deleteTaskHandler={deleteTaskHandler}
+        taskUpdateHandler={props.taskUpdateHandler}
+        toggleCompleteHandler={props.toggleCompleteHandler}
+      />
     );
   });
 
@@ -133,10 +55,10 @@ const TaskList = (props) => {
       boxShadow={3}
       borderRadius={4}
     >
-      <NewTaskDialog
+      <TaskDialog
         handleClickOpen={handleClickOpen}
         handleClose={handleClose}
-        addTaskHandler={props.addTaskHandler}
+        TaskHandler={props.addTaskHandler}
         open={open}
       />
       <Fab
