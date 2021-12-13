@@ -32,10 +32,10 @@ const Navigation = ({auth}) => {
           <Button
             color="inherit"
             onClick={() => {
-              navigate("/");
+              navigate("/user");
             }}
           >
-            Home
+           User
           </Button>
           <Button
             color="inherit"
@@ -43,14 +43,14 @@ const Navigation = ({auth}) => {
           >
             Logout
           </Button>
-          <Button
+          {/* <Button
             color="inherit"
             onClick={() => {
               navigate("/user");
             }}
           >
             User
-          </Button>
+          </Button> */}
         </Toolbar>
       </AppBar>
     </Box>

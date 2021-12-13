@@ -31,7 +31,7 @@ const PomTimer = () => {
   }
 
   const sessionDecrementHandler = (e) => {
-    if(sessionDetail.sessionTime!==0){
+    if(sessionDetail.sessionTime>300){
       setsessionDetail((prevState)=>{
         let {sessionTime} = prevState;
         sessionTime = sessionTime-300;
@@ -49,7 +49,7 @@ const PomTimer = () => {
   }
 
   const breakDecrementHandler = () => {
-    if(sessionDetail.breakTime!==0){
+    if(sessionDetail.breakTime>300){
       setsessionDetail((prevState)=>{
         let {breakTime} = prevState;
         breakTime = breakTime-300;
@@ -160,14 +160,14 @@ const PomTimer = () => {
       
       <Box display="flex">
         <Box display="flex">
-          <Button className="decrement" onClick={sessionDecrementHandler}>-</Button>
+          <Button className="decrement" disabled={sessionDetail.active!=="false"} onClick={sessionDecrementHandler}>-</Button>
           <Typography>session time</Typography>
-          <Button className="increment" onClick={sessionIncrementHandler}>+</Button>
+          <Button className="increment" disabled={sessionDetail.active!=="false"} onClick={sessionIncrementHandler}>+</Button>
         </Box>
         <Box display="flex">
-          <Button className="decrement" onClick={breakDecrementHandler}>-</Button>
+          <Button className="decrement" disabled={sessionDetail.active!=="false"} onClick={breakDecrementHandler}>-</Button>
           <Typography>break time</Typography>
-          <Button className="increment" onClick={breakIncrementHandler}>+</Button>
+          <Button className="increment" disabled={sessionDetail.active!=="false"} onClick={breakIncrementHandler}>+</Button>
         </Box>
       </Box>
     </Card>

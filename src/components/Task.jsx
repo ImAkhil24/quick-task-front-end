@@ -56,7 +56,7 @@ const Task = ({
       />
       <Accordion elevation={0} sx={{ m: 1 }}>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography className={completed ? classes.complete : ""}>
+          <Typography variant="h6" className={completed ? classes.complete : ""}>
             <BoltIcon
               color="info"
               sx={{
@@ -68,7 +68,7 @@ const Task = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>{task.description}</Typography>
+          <Typography variant="body1">{task.description}</Typography>
           <Box
             display="flex"
             flexDirection="row"
