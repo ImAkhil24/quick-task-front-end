@@ -1,39 +1,177 @@
-import { Card, Paper, Box, Typography, Button } from "@mui/material";
-
+import { Card, Paper, Box, Typography, Button, CardHeader } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StopIcon from '@mui/icons-material/Stop';
+import { useState } from "react";
 // a circle inside which the timer will be displayed
-// a session time button with + and - signs to increment by 5 and decrement by 5
+// a session time button with + and - signs to increment by 60 and decrement by 60
 // a break time button also
 
-
 const PomTimer = () => {
-  return (
-    <Card sx={{height: "50%", width: "100%", boxShadow: "3", display:"flex", flexDirection:"column", justifyContent: "space-around"}}>
-    
-          <Paper sx={{height: "10rem", width: "10rem", borderRadius: "50%",margin: "auto", display: "flex", flexDirection: "column"}}>
-            <Typography variant="h3" sx={{margin: "auto"}}>
-              50:00
-            </Typography>
-            <Typography variant="captian" sx={{margin: "auto"}}>
-              5:00
-            </Typography>
+  // states
 
-          </Paper>
+  const initialSessionDetail = {
+    sessionTime: 10,
+    breakTime: 10,
+    currentSessionTime: 10,
+    currentBreakTime: 10,
+    active: "false", // false break session
+    timer: null,
+  }
+
+  const [sessionDetail, setsessionDetail] = useState(initialSessionDetail);
+
+
+  // handlers
+  const sessionIncrementHandler = (e) => {
+    setsessionDetail((prevState)=>{
+      let {sessionTime} = prevState;
+      sessionTime = sessionTime+300;
+      return ({...prevState, sessionTime, currentSessionTime: sessionTime})
+    })
+  }
+
+  const sessionDecrementHandler = (e) => {
+    if(sessionDetail.sessionTime!==0){
+      setsessionDetail((prevState)=>{
+        let {sessionTime} = prevState;
+        sessionTime = sessionTime-300;
+        return ({...prevState, sessionTime, currentSessionTime: sessionTime})
+      })
+    }
+  }
+
+  const breakIncrementHandler = () => {
+    setsessionDetail((prevState)=>{
+      let {breakTime} = prevState;
+      breakTime = breakTime+300;
+      return ({...prevState, breakTime, currentBreakTime: breakTime})
+    })
+  }
+
+  const breakDecrementHandler = () => {
+    if(sessionDetail.breakTime!==0){
+      setsessionDetail((prevState)=>{
+        let {breakTime} = prevState;
+        breakTime = breakTime-300;
+        return ({...prevState, breakTime, currentBreakTime: breakTime})
+      })
+    }
+  }
+
+  const sessionStatusHandler = (e) => {
+    const {active} = sessionDetail;
+
+    if(active==="false"){
+      const timer = setInterval(()=>{
+        setsessionDetail((prevState)=>{
+
+          // if the timers runs out then reset the timer.
+          if(prevState.active === "break"){
+            let {currentBreakTime} = prevState;
+            if(currentBreakTime===0){
+              return ({...prevState, currentBreakTime: prevState.breakTime, active: "session"});
+            }else{
+              currentBreakTime = currentBreakTime-1;
+              return ({...prevState, currentBreakTime, active: "break"});
+            }
+          }else{
+            let {currentSessionTime} = prevState;
+            if(currentSessionTime===0){
+              return ({...prevState, currentSessionTime: prevState.sessionTime, active: "break"});
+            }else{
+              currentSessionTime = currentSessionTime-1;
+              return ({...prevState, currentSessionTime, active: "session"});
+            }
+          }
+        })
           
-          <Box display="flex">
-            <Box display="flex">
-              <Button>-</Button>
-              <Typography>session time</Typography>
-              <Button>+</Button>
-            </Box>
-            <Box display="flex">
-              <Button>-</Button>
-              <Typography>break time</Typography>
-              <Button>+</Button>
-            </Box>
-          </Box>
-        
+      }, 1000);
+      // toggle the state and set the interval id
+      setsessionDetail((prevState)=>{
+        return ({...prevState, timer})
+      })
+    } else {
+      setsessionDetail((prevState)=>{
+        clearInterval(prevState.timer);
+        return (initialSessionDetail);
+      })
+    }
+  }
+
+  const getSeconds = (time) => {
+    let newTime = time%60;
+    newTime = newTime.toString().padStart(2, '0');
+    return (newTime);
+  }
+
+
+
+  //JSX
+
+  let title;
+
+  if(sessionDetail.active === "false"){
+    title = "Start A Session";
+  }else if(sessionDetail.active === "session"){
+    title = "Session is Running";
+  }else{
+    title = "Break Time!"
+  }
+
+
+
+  return (
+    <Card
+      sx={{
+        height: "50%",
+        width: "100%",
+        boxShadow: "3",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+      }}
+    >
+      <CardHeader title={<Typography variant="h4" align="center"> {title} </Typography>}/>
+      <Paper
+        sx={{
+          height: "10rem",
+          width: "10rem",
+          borderRadius: "50%",
+          margin: "auto",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" sx={{ margin: "auto" }}>
+          {Math.trunc((sessionDetail.currentSessionTime)/60)+":"+getSeconds(sessionDetail.currentSessionTime)}
+        </Typography>
+        <Button sx={{ width: "50%" }} onClick={sessionStatusHandler}>
+          {(sessionDetail.active==="false")?
+            <PlayArrowIcon fontSize="large" />:
+            <StopIcon fontSize="large" />
+          }
+          
+        </Button>
+        <Typography variant="captian" sx={{ margin: "auto" }}>
+        {Math.trunc((sessionDetail.currentBreakTime)/60)+":"+getSeconds(sessionDetail.currentBreakTime)}
+        </Typography>
+      </Paper>
+      
+      <Box display="flex">
+        <Box display="flex">
+          <Button className="decrement" onClick={sessionDecrementHandler}>-</Button>
+          <Typography>session time</Typography>
+          <Button className="increment" onClick={sessionIncrementHandler}>+</Button>
+        </Box>
+        <Box display="flex">
+          <Button className="decrement" onClick={breakDecrementHandler}>-</Button>
+          <Typography>break time</Typography>
+          <Button className="increment" onClick={breakIncrementHandler}>+</Button>
+        </Box>
+      </Box>
     </Card>
   );
-}
+};
 
 export default PomTimer;
