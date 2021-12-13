@@ -38,7 +38,7 @@ const TaskDialog = ({
 
   const onCheckHandler = (e) => {
     setTaskDetail((prevState) => {
-      return { ...prevState, complete: checked };
+      return { ...prevState, completed: !checked };
     });
     setChecked(!checked);
   };
