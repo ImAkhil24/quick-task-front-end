@@ -31,7 +31,7 @@ const ProtectedView = ({ auth }) => {
           </>
         }
       >
-        <Route index element={<Home />}></Route>
+        <Route index element={<User />}></Route>
         <Route path="login" element={<Login />} />
         <Route path="user" element={<User />} />
       </Route>

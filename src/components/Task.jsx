@@ -28,9 +28,12 @@ const Task = ({
   toggleCompleteHandler,
   taskUpdateHandler,
 }) => {
-  const [open, setOpen] = useState(false);
   const { completed } = task;
 
+  // states
+  const [open, setOpen] = useState(false);
+
+  // handlers
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -39,6 +42,7 @@ const Task = ({
     setOpen(false);
   };
 
+  // JSX
   const classes = useStyles();
   return (
     <>
@@ -56,7 +60,10 @@ const Task = ({
       />
       <Accordion elevation={0} sx={{ m: 1 }}>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant="h6" className={completed ? classes.complete : ""}>
+          <Typography
+            variant="h6"
+            className={completed ? classes.complete : ""}
+          >
             <BoltIcon
               color="info"
               sx={{

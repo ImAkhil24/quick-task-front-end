@@ -13,9 +13,12 @@ import soundFile from "../sound.wav";
 import { useRef } from "react";
 // import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
-// a circle inside which the timer will be displayed
-// a session time button with + and - signs to increment by 60 and decrement by 60
-// a break time button also
+// helper functions
+const getSeconds = (time) => {
+  let newTime = time % 60;
+  newTime = newTime.toString().padStart(2, "0");
+  return newTime;
+};
 
 const PomTimer = () => {
   const soundElement = useRef(null);
@@ -23,10 +26,10 @@ const PomTimer = () => {
   // states
 
   const initialSessionDetail = {
-    sessionTime: 10,
-    breakTime: 10,
-    currentSessionTime: 10,
-    currentBreakTime: 10,
+    sessionTime: 300,
+    breakTime: 300,
+    currentSessionTime: 300,
+    currentBreakTime: 300,
     active: "false", // false break session
     timer: null,
   };
@@ -117,12 +120,6 @@ const PomTimer = () => {
         return initialSessionDetail;
       });
     }
-  };
-
-  const getSeconds = (time) => {
-    let newTime = time % 60;
-    newTime = newTime.toString().padStart(2, "0");
-    return newTime;
   };
 
   //JSX

@@ -29,28 +29,29 @@ const Navigation = ({auth}) => {
             Welcome
           </Typography>
 
-          <Button
+          {/* <Button
             color="inherit"
             onClick={() => {
-              navigate("/user");
+              navigate("/");
             }}
           >
-           User
-          </Button>
+           Home
+          </Button> */}
           <Button
-            color="inherit"
-            onClick={logoutHandler}
-          >
-            Logout
-          </Button>
-          {/* <Button
             color="inherit"
             onClick={() => {
               navigate("/user");
             }}
           >
             User
-          </Button> */}
+          </Button>
+
+          <Button
+            color="inherit"
+            onClick={logoutHandler}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
