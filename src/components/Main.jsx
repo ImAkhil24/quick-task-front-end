@@ -12,7 +12,7 @@ const UnprotectedView = ({ auth }) => {
     <Routes>
       <Route path="/">
         <Route index element={<Login setToken={auth.setToken} />} />
-        <Route path="signup" element={<Signup />} />
+        <Route path="signup" element={<Signup setToken={auth.setToken}/>} />
         <Route path="*" element={<Login setToken={auth.setToken} />} />
       </Route>
     </Routes>
@@ -32,8 +32,9 @@ const ProtectedView = ({ auth }) => {
         }
       >
         <Route index element={<User />}></Route>
-        <Route path="login" element={<Login />} />
+        {/* <Route path="login" element={<Login />} /> */}
         <Route path="user" element={<User />} />
+        <Route path="*" element={<User />} />
       </Route>
     </Routes>
   );

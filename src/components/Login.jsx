@@ -57,7 +57,7 @@ const Login = ({setToken}) => {
             autoComplete="email"
             autoFocus
             onChange={onChangeHandler}
-            ></TextField>
+            />
             <TextField
               margin="normal"
               required
